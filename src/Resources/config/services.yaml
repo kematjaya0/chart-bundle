@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        
+    Kematjaya\ChartBundle\Builder\ChartBuilderInterface:
+        class: Kematjaya\ChartBundle\Builder\ChartBuilder
+        
+    Kematjaya\ChartBundle\Twig\ChartExtension:
+        tags: ['twig.extension']

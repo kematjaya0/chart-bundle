@@ -1,0 +1,68 @@
+<div class="row">
+    {% for id, statistic in statistics %}
+    <div class="col-sm-{{ statistic.width }}">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">{{ statistic.title }}</h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            {% if statistic.chart %}
+                            <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#chart{{ id }}" role="tab"
+                               aria-controls="nav-home" aria-selected="true">
+                                {{ 'chart'|trans }}
+                            </a>
+                            {% endif %}
+                            {% if statistic.table %}
+                            <a class="nav-link {{ statistic.table_active }}" id="nav-home-tab" data-toggle="tab" href="#table{{ id }}" role="tab"
+                               aria-controls="nav-home" aria-selected="true">
+                                {{ 'table'|trans }}
+                            </a>
+                            {% endif %}
+                        </div>
+                    </nav>
+                    <div class="tab-content">
+                        {% if statistic.chart %}
+                        <div class="tab-pane fade show active" id="chart{{ id }}" role="tabpanel"
+                             aria-labelledby="nav-home-tab">
+                            <div id="container-{{ id }}"></div>
+                        </div>
+                        {% endif %}
+                        {% if statistic.table %}
+                        <div class="tab-pane fade show {{ statistic.table_active }}" id="table{{ id }}" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="table-responsive">
+                                <table class="table table-bordered datatables_export">
+                                    <thead>
+                                        <tr>
+                                            {% for header in statistic.table.header %}
+                                            <th>{{ header }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in statistic.table.data %}
+                                        <tr>
+                                            {% for v in row %}
+                                            <td>{{ v|raw }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if statistic.chart %}
+    <script>
+        Highcharts.chart('container-{{ id }}', {{ statistic.chart|raw }});
+    </script>
+    {% endif %}
+    {% endfor %}
+</div>

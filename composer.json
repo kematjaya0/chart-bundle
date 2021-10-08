@@ -1,0 +1,27 @@
+{
+    "name": "kematjaya/chart-bundle",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nur Hidayatullah",
+            "email": "kematjaya0@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "^5.3",
+        "doctrine/collections": "^1.6",
+        "symfony/twig-bundle": "^5.3",
+        "kematjaya/user-bundle": "^4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kematjaya\\ChartBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kematjaya\\ChartBundle\\Tests\\": "tests/"
+        }
+    }
+}
