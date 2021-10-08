@@ -8,7 +8,7 @@
 namespace Kematjaya\ChartBundle;
 
 use Kematjaya\ChartBundle\Chart\AbstractChart;
-use Kematjaya\ChartBundle\CompilerPass;
+use Kematjaya\ChartBundle\CompilerPass\ChartCompilerPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -24,7 +24,7 @@ class ChartBundle extends Bundle
         $container->registerForAutoconfiguration(AbstractChart::class)
                 ->addTag(AbstractChart::TAG_NAME);
         
-        $container->addCompilerPass(new CompilerPass());
+        $container->addCompilerPass(new ChartCompilerPass());
         
         parent::build($container);
     }
