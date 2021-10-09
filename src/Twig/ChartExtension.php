@@ -71,44 +71,50 @@ class ChartExtension extends AbstractExtension
     
     public function render(array $options = []):?string
     {
-        $singleRole = $this->getSingleRole();
-        if (null === $singleRole) {
-            
-            return null;
-        }
-        $statistics = [];
-        foreach ($this->chartBuilder->getChart($singleRole) as $chart) {
-            if (!$chart instanceof AbstractChart) {
-                continue;
-            }
-            
-            $id = md5(date('Y-m-d H:i:s') . rand());
-            $qb = $chart->getQueryBuilder('t', isset($options['filter']) ? $options['filter'] : null);
-            $chart = json_encode(
-                $this->buildChartData($chart, $qb, $chart->getChartType())
-            );
+        try {
+            $singleRole = $this->getSingleRole();
+            if (null === $singleRole) {
 
-            $table = null;
-            if ($chart instanceof SummaryTableRepositoryInterface) {
-                $table = [
-                    'header' => $chart->getHeaders(),
-                    'data' => $chart->getDatas($qb)
-                ];
+                return null;
             }
-            
-            $statistics[$id] = [
-                'title' => $chart->getTitle(),
-                'id' => $id,
-                'chart' => $chart,
-                'table' => $table,
-                'table_active' => $chart ? '' : 'active',
-                'width' => $chart->getWidth()
-            ];
-        }   
-        
-        return $this->twig->render('@Chart/chart.twig', [
-            'statistics' => $statistics
-        ]);
+            $statistics = [];
+            foreach ($this->chartBuilder->getChart($singleRole) as $chart) {
+                if (!$chart instanceof AbstractChart) {
+                    continue;
+                }
+                
+                $id = md5(date('Y-m-d H:i:s') . rand());
+                $qb = $chart->getQueryBuilder('t', isset($options['filter']) ? $options['filter'] : null);
+                
+                $graph = json_encode(
+                    $this->buildChartData($chart, $qb, $chart->getChartType())
+                );
+
+                $table = null;
+                if ($chart instanceof SummaryTableRepositoryInterface) {
+                    $table = [
+                        'header' => $chart->getHeaders(),
+                        'data' => $chart->getDatas($qb)
+                    ];
+                }
+
+                $statistics[$id] = [
+                    'title' => $chart->getTitle(),
+                    'id' => $id,
+                    'chart' => $graph,
+                    'table' => $table,
+                    'table_active' => $chart ? '' : 'active',
+                    'width' => $chart->getWidth()
+                ];
+            }   
+
+            return $this->twig->render('@Chart/chart.twig', [
+                'statistics' => $statistics
+            ]);
+        } catch (\Exception $ex) {
+            dump(sprintf("'%s' line %s: %s", $ex->getFile(), $ex->getLine(), $ex->getMessage()));
+            return '';
+        }
     }
     
     protected function buildChartData(AbstractChart $repository, QueryBuilder $queryBuilder, string $chartType): array
