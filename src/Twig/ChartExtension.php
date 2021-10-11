@@ -84,7 +84,7 @@ class ChartExtension extends AbstractExtension
                 }
                 
                 $id = md5(date('Y-m-d H:i:s') . rand());
-                $qb = $chart->getQueryBuilder('t', isset($options['filter']) ? $options['filter'] : null);
+                $qb = $chart->getQueryBuilder('t', isset($options['filter']) ? $options['filter'] : []);
                 
                 $graph = json_encode(
                     $this->buildChartData($chart, $qb, $chart->getChartType())
