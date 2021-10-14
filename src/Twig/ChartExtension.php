@@ -108,7 +108,7 @@ class ChartExtension extends AbstractExtension
                 ];
             }   
 
-            return $this->twig->render('@Chart/chart.twig', [
+            return $this->twig->render('@Chart/charts.twig', [
                 'statistics' => $statistics
             ]);
         } catch (\Exception $ex) {

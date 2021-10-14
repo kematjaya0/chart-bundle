@@ -1,0 +1,5 @@
+<div class="row">
+    {% for id, statistic in statistics %}
+    {{ include('@Chart/chart.twig', {statistic: statistic}) }}
+    {% endfor %}
+</div>
