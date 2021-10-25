@@ -7,6 +7,7 @@
 
 namespace Kematjaya\ChartBundle\Twig;
 
+use Kematjaya\ChartBundle\Chart\ClickableChartInterface;
 use Kematjaya\ChartBundle\Chart\SummaryTableRepositoryInterface;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Kematjaya\ChartBundle\Builder\ChartBuilderInterface;
@@ -89,7 +90,7 @@ class ChartExtension extends AbstractExtension
                 $graph = json_encode(
                     $this->buildChartData($chart, $qb, $chart->getChartType())
                 );
-
+                //dump($graph);exit;
                 $table = null;
                 if ($chart instanceof SummaryTableRepositoryInterface) {
                     $table = [
@@ -98,13 +99,19 @@ class ChartExtension extends AbstractExtension
                     ];
                 }
 
+                $clickableLink = [];
+                if ($chart instanceof ClickableChartInterface) {
+                    $clickableLink['"%func%"'] = $this->buildClickPoint($chart, $qb);
+                }
+                
                 $statistics[$id] = [
                     'title' => $chart->getTitle(),
                     'id' => $id,
                     'chart' => $graph,
                     'table' => $table,
                     'table_active' => $chart ? '' : 'active',
-                    'width' => $chart->getWidth()
+                    'width' => $chart->getWidth(),
+                    'clickable' => $clickableLink
                 ];
             }   
 
@@ -117,8 +124,30 @@ class ChartExtension extends AbstractExtension
         }
     }
     
+    protected function buildClickPoint(ClickableChartInterface $chart, QueryBuilder $queryBuilder):string
+    {
+        return sprintf('function (event) {
+                let query = event.point.category;
+                if (typeof query == "undefined") {
+                    query = event.point.name;
+                }
+                window.location.href = "%s?q=" + event.point.category;
+            }', $chart->getURL($queryBuilder));
+    }
+    
     protected function buildChartData(AbstractChart $repository, QueryBuilder $queryBuilder, string $chartType): array
     {
+        $series = $repository->getSeries($queryBuilder);
+        if ($repository instanceof ClickableChartInterface) {
+            foreach ($series as $k => $v) {
+                $series[$k]['point'] = [
+                    "events" => [
+                        "click" => '%func%'
+                    ]
+                ];
+            }   
+        }
+        
         $chart = [
             "title" => [
                 "text" => $repository->getChartTitle()
@@ -126,7 +155,7 @@ class ChartExtension extends AbstractExtension
             "subtitle" => [
                 "text" => ''
             ],
-            "series" => $repository->getSeries($queryBuilder),
+            "series" => $series,
             "credits" => [
                 "enabled" => false
             ]
