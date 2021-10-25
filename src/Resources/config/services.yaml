@@ -6,5 +6,8 @@ services:
     Kematjaya\ChartBundle\Builder\ChartBuilderInterface:
         class: Kematjaya\ChartBundle\Builder\ChartBuilder
         
+    Kematjaya\ChartBundle\Builder\ChartRendererBuilderInterface:
+        class: Kematjaya\ChartBundle\Builder\ChartRendererBuilder
+        
     Kematjaya\ChartBundle\Twig\ChartExtension:
         tags: ['twig.extension']
