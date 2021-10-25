@@ -78,6 +78,7 @@ class ChartExtension extends AbstractExtension
 
                 return null;
             }
+            
             $statistics = [];
             foreach ($this->chartBuilder->getChart($singleRole) as $chart) {
                 if (!$chart instanceof AbstractChart) {
@@ -90,7 +91,7 @@ class ChartExtension extends AbstractExtension
                 $graph = json_encode(
                     $this->buildChartData($chart, $qb, $chart->getChartType())
                 );
-                //dump($graph);exit;
+                
                 $table = null;
                 if ($chart instanceof SummaryTableRepositoryInterface) {
                     $table = [
@@ -102,6 +103,20 @@ class ChartExtension extends AbstractExtension
                 $clickableLink = [];
                 if ($chart instanceof ClickableChartInterface) {
                     $clickableLink['"%func%"'] = $this->buildClickPoint($chart, $qb);
+                    if (!empty($table)) {
+                        $table['data'] = array_map(function (array $row) use ($chart, $qb) {
+                            
+                            $modalAttribute = [];
+                            if ($chart->getModalDOMId()) {
+                                $modalAttribute[] = 'data-toggle="modal"';
+                                $modalAttribute[] = sprintf('data-target="%s"', $chart->getModalDOMId());
+                            }
+                            
+                            $row['total'] = sprintf('<a href="%s" %s>%s</a>', $chart->getURL($qb), implode(" ", $modalAttribute), $row['total']);
+                            
+                            return $row;
+                        }, $table['data']);
+                    }
                 }
                 
                 $statistics[$id] = [

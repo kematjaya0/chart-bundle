@@ -16,4 +16,6 @@ use Doctrine\ORM\QueryBuilder;
 interface ClickableChartInterface 
 {
     public function getURL(QueryBuilder $queryBuilder):string;
+    
+    public function getModalDOMId():?string;
 }
