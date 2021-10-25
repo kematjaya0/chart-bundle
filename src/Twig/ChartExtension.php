@@ -10,6 +10,7 @@ namespace Kematjaya\ChartBundle\Twig;
 use Kematjaya\ChartBundle\Chart\ClickableChartInterface;
 use Kematjaya\ChartBundle\Chart\SummaryTableRepositoryInterface;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
+use Kematjaya\ChartBundle\Builder\ChartRendererBuilderInterface;
 use Kematjaya\ChartBundle\Builder\ChartBuilderInterface;
 use Kematjaya\UserBundle\Entity\DefaultUser;
 use Twig\Extension\AbstractExtension;
@@ -44,8 +45,15 @@ class ChartExtension extends AbstractExtension
      */
     private $tokenStorage;
     
-    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, ChartBuilderInterface $chartBuilder) 
+    /**
+     * 
+     * @var ChartRendererBuilderInterface
+     */
+    private $chartRendererBuilder;
+    
+    public function __construct(Environment $twig, ChartRendererBuilderInterface $chartRendererBuilder, TokenStorageInterface $tokenStorage, ChartBuilderInterface $chartBuilder) 
     {
+        $this->chartRendererBuilder = $chartRendererBuilder;
         $this->tokenStorage = $tokenStorage;
         $this->chartBuilder = $chartBuilder;
         $this->twig = $twig;
@@ -85,6 +93,7 @@ class ChartExtension extends AbstractExtension
                     continue;
                 }
                 
+                $chartRenderer = $this->chartRendererBuilder->getChartRenderer($chart);
                 $id = md5(date('Y-m-d H:i:s') . rand());
                 $qb = $chart->getQueryBuilder('t', isset($options['filter']) ? $options['filter'] : []);
                 

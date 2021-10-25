@@ -48,7 +48,7 @@ class ChartRendererBuilder implements ChartRendererBuilderInterface
         
         if ($elements->isEmpty()) {
             
-            throw new \Exception("doesn't support for '%s' class", get_class($chart));
+            throw new \Exception(sprintf("doesn't support for '%s' class", get_class($chart)));
         }
         
         return $elements->first();
