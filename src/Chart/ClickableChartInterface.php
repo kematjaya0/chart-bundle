@@ -18,4 +18,6 @@ interface ClickableChartInterface
     public function getURL(QueryBuilder $queryBuilder):string;
     
     public function getModalDOMId():?string;
+    
+    public function getQueryKey():?string;
 }

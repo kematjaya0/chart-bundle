@@ -104,27 +104,13 @@ class ChartExtension extends AbstractExtension
                 if ($chart instanceof SummaryTableRepositoryInterface) {
                     $table = [
                         'header' => $chart->getHeaders(),
-                        'data' => $chart->getDatas($qb)
+                        'data' => $this->buildTableData($chart, $qb)
                     ];
                 }
 
                 $clickableLink = [];
                 if ($chart instanceof ClickableChartInterface) {
                     $clickableLink['"%func%"'] = $this->buildClickPoint($chart, $qb);
-                    if (!empty($table)) {
-                        $table['data'] = array_map(function (array $row) use ($chart, $qb) {
-                            
-                            $modalAttribute = [];
-                            if ($chart->getModalDOMId()) {
-                                $modalAttribute[] = 'data-toggle="modal"';
-                                $modalAttribute[] = sprintf('data-target="%s"', $chart->getModalDOMId());
-                            }
-                            
-                            $row['total'] = sprintf('<a href="%s" %s>%s</a>', $chart->getURL($qb), implode(" ", $modalAttribute), $row['total']);
-                            
-                            return $row;
-                        }, $table['data']);
-                    }
                 }
                 
                 $statistics[$id] = [
@@ -147,6 +133,30 @@ class ChartExtension extends AbstractExtension
         }
     }
     
+    protected function buildTableData(SummaryTableRepositoryInterface $chart, QueryBuilder $queryBuilder):array
+    {
+        if (!$chart instanceof ClickableChartInterface) {
+            
+            return $chart->getDatas($queryBuilder);
+        }
+        
+        return array_map(function (array $row) use ($chart, $queryBuilder) {
+            $modalAttribute = [];
+            if ($chart->getModalDOMId()) {
+                $modalAttribute[] = 'data-toggle="modal"';
+                $modalAttribute[] = sprintf('data-target="%s"', $chart->getModalDOMId());
+            }
+            
+            $keys = array_keys($row);
+            $label = $keys[0];
+            $value = $keys[count($keys) - 1];
+            $queryKey = null !== $chart->getQueryKey() ? $chart->getQueryKey() : 'q';
+
+            $row[$value] = sprintf('<a href="%s?%s=%s" %s>%s</a>', $chart->getURL($queryBuilder), $queryKey, $row[$label], implode(" ", $modalAttribute), $row[$value]);
+            
+            return $row;
+        }, $chart->getDatas($queryBuilder));
+    }
     protected function buildClickPoint(ClickableChartInterface $chart, QueryBuilder $queryBuilder):string
     {
         $function = 'function (event) {
@@ -156,18 +166,22 @@ class ChartExtension extends AbstractExtension
             }
             %s
         }';
+        
+        $queryKey = null !== $chart->getQueryKey() ? $chart->getQueryKey() : 'q';
         if (!$chart->getModalDOMId()) {
-            $actions = sprintf('window.location.href = "%s?q=" + query;', $chart->getURL($queryBuilder));
+            $actions = sprintf('window.location.href = "%s?%s=" + query;', $chart->getURL($queryBuilder), $queryKey);
             
             return sprintf($function, $actions);
         }
           
         $actions = sprintf(''
                 . '$("%s").modal("show");'
-                . '$("%s").find(".modal-content").load("%s?q=" + query);', 
+                . '$("%s").find(".modal-content").load("%s?%s=" + query);', 
                 $chart->getModalDOMId(),
                 $chart->getModalDOMId(),
-                $chart->getURL($queryBuilder));
+                $chart->getURL($queryBuilder),
+                $queryKey
+            );
         
         return sprintf($function, $actions);
     }
