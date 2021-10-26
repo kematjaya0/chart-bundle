@@ -149,13 +149,27 @@ class ChartExtension extends AbstractExtension
     
     protected function buildClickPoint(ClickableChartInterface $chart, QueryBuilder $queryBuilder):string
     {
-        return sprintf('function (event) {
-                let query = event.point.category;
-                if (typeof query == "undefined") {
-                    query = event.point.name;
-                }
-                window.location.href = "%s?q=" + event.point.category;
-            }', $chart->getURL($queryBuilder));
+        $function = 'function (event) {
+            let query = event.point.category;
+            if (typeof query == "undefined") {
+                query = event.point.name;
+            }
+            %s
+        }';
+        if (!$chart->getModalDOMId()) {
+            $actions = sprintf('window.location.href = "%s?q=" + event.point.category;', $chart->getURL($queryBuilder));
+            
+            return sprintf($function, $actions);
+        }
+          
+        $actions = sprintf(''
+                . '$("%s").modal("show");'
+                . '$("%s").find(".modal-content").load("%s?q=" + event.point.category);', 
+                $chart->getModalDOMId(),
+                $chart->getModalDOMId(),
+                $chart->getURL($queryBuilder));
+        
+        return sprintf($function, $actions);
     }
     
     protected function getSingleRole():?string
