@@ -5,8 +5,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPInterface.php to edit this template
  */
 
-namespace Kematjaya\ChartBundle\Chart;
+namespace Kematjaya\ChartBundle\Renderer;
 
+use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Doctrine\ORM\QueryBuilder;
 
 /**

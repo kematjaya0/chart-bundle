@@ -7,7 +7,7 @@
 
 namespace Kematjaya\ChartBundle;
 
-use Kematjaya\ChartBundle\Chart\ChartRendererInterface;
+use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Kematjaya\ChartBundle\CompilerPass\ChartRendererCompilerPass;
 use Kematjaya\ChartBundle\CompilerPass\ChartCompilerPass;

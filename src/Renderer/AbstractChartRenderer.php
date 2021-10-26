@@ -7,9 +7,9 @@
 
 namespace Kematjaya\ChartBundle\Renderer;
 
+use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
 use Kematjaya\ChartBundle\Chart\ClickableChartInterface;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
-use Kematjaya\ChartBundle\Chart\ChartRendererInterface;
 use Doctrine\ORM\QueryBuilder;
 
 /**

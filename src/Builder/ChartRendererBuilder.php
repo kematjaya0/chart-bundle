@@ -8,7 +8,7 @@
 namespace Kematjaya\ChartBundle\Builder;
 
 use Kematjaya\ChartBundle\Chart\AbstractChart;
-use Kematjaya\ChartBundle\Chart\ChartRendererInterface;
+use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 

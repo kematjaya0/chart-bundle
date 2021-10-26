@@ -7,7 +7,7 @@
 
 namespace Kematjaya\ChartBundle\CompilerPass;
 
-use Kematjaya\ChartBundle\Chart\ChartRendererInterface;
+use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
 use Kematjaya\ChartBundle\Builder\ChartRendererBuilderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
