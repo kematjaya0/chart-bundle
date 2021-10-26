@@ -2,6 +2,7 @@ services:
     _defaults:
         public: true
         autowire: true
+        autoconfigure: true
         
     Kematjaya\ChartBundle\Builder\ChartBuilderInterface:
         class: Kematjaya\ChartBundle\Builder\ChartBuilder
