@@ -157,14 +157,14 @@ class ChartExtension extends AbstractExtension
             %s
         }';
         if (!$chart->getModalDOMId()) {
-            $actions = sprintf('window.location.href = "%s?q=" + event.point.category;', $chart->getURL($queryBuilder));
+            $actions = sprintf('window.location.href = "%s?q=" + query;', $chart->getURL($queryBuilder));
             
             return sprintf($function, $actions);
         }
           
         $actions = sprintf(''
                 . '$("%s").modal("show");'
-                . '$("%s").find(".modal-content").load("%s?q=" + event.point.category);', 
+                . '$("%s").find(".modal-content").load("%s?q=" + query);', 
                 $chart->getModalDOMId(),
                 $chart->getModalDOMId(),
                 $chart->getURL($queryBuilder));
