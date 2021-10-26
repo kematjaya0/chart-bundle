@@ -10,7 +10,9 @@ services:
     Kematjaya\ChartBundle\Builder\ChartRendererBuilderInterface:
         class: Kematjaya\ChartBundle\Builder\ChartRendererBuilder
         
-    Kematjaya\ChartBundle\Renderer\AbstractChartRenderer: ~
+    Kematjaya\ChartBundle\Renderer\PieChartRenderer: ~
+    Kematjaya\ChartBundle\Renderer\LineChartRenderer: ~
+    Kematjaya\ChartBundle\Renderer\ColumnChartRenderer: ~
         
     Kematjaya\ChartBundle\Twig\ChartExtension:
         tags: ['twig.extension']
