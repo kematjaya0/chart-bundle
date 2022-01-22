@@ -7,6 +7,7 @@
 
 namespace Kematjaya\ChartBundle\Twig;
 
+use Kematjaya\ChartBundle\Event\ChartPointClickCreatedEvent;
 use Kematjaya\ChartBundle\Event\PreBuildTableLinkEvent;
 use Kematjaya\ChartBundle\Chart\ClickableChartInterface;
 use Kematjaya\ChartBundle\Chart\SummaryTableRepositoryInterface;
@@ -185,7 +186,12 @@ class ChartExtension extends AbstractExtension
         if (!$chart->getModalDOMId()) {
             $actions = sprintf('window.location.href = "%s?%s=" + query;', $chart->getURL($queryBuilder), $queryKey);
             
-            return sprintf($function, $actions);
+            $event = $this->eventDispatcher->dispatch(
+                new ChartPointClickCreatedEvent($chart, $queryBuilder, sprintf($function, $actions)),
+                ChartPointClickCreatedEvent::EVENT_NAME
+            );
+
+            return $event->getValue();
         }
           
         $actions = sprintf(''
@@ -197,7 +203,12 @@ class ChartExtension extends AbstractExtension
                 $queryKey
             );
         
-        return sprintf($function, $actions);
+        $event = $this->eventDispatcher->dispatch(
+            new ChartPointClickCreatedEvent($chart, $queryBuilder, sprintf($function, $actions)),
+            ChartPointClickCreatedEvent::EVENT_NAME
+        );
+        
+        return $event->getValue();
     }
     
     protected function getSingleRole():?string
