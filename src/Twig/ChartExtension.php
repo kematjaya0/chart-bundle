@@ -7,6 +7,7 @@
 
 namespace Kematjaya\ChartBundle\Twig;
 
+use Kematjaya\ChartBundle\Event\PreBuildTableLinkEvent;
 use Kematjaya\ChartBundle\Chart\ClickableChartInterface;
 use Kematjaya\ChartBundle\Chart\SummaryTableRepositoryInterface;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
@@ -17,6 +18,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\Environment;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -51,12 +53,19 @@ class ChartExtension extends AbstractExtension
      */
     private $chartRendererBuilder;
     
-    public function __construct(Environment $twig, ChartRendererBuilderInterface $chartRendererBuilder, TokenStorageInterface $tokenStorage, ChartBuilderInterface $chartBuilder) 
+    /**
+     * 
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+    
+    public function __construct(Environment $twig, EventDispatcherInterface $eventDispatcher, ChartRendererBuilderInterface $chartRendererBuilder, TokenStorageInterface $tokenStorage, ChartBuilderInterface $chartBuilder) 
     {
         $this->chartRendererBuilder = $chartRendererBuilder;
         $this->tokenStorage = $tokenStorage;
         $this->chartBuilder = $chartBuilder;
         $this->twig = $twig;
+        $this->eventDispatcher = $eventDispatcher;
     }
     
     public function getFunctions()
@@ -151,8 +160,13 @@ class ChartExtension extends AbstractExtension
             $label = $keys[0];
             $value = $keys[count($keys) - 1];
             $queryKey = null !== $chart->getQueryKey() ? $chart->getQueryKey() : 'q';
-
-            $row[$value] = sprintf('<a href="%s?%s=%s" %s>%s</a>', $chart->getURL($queryBuilder), $queryKey, $row[$label], implode(" ", $modalAttribute), $row[$value]);
+            
+            $event = $this->eventDispatcher->dispatch(
+                new PreBuildTableLinkEvent($queryBuilder, $chart, $row[$label]),
+                PreBuildTableLinkEvent::EVENT_NAME
+            );
+            
+            $row[$value] = sprintf('<a href="%s?%s=%s" %s>%s</a>', $chart->getURL($queryBuilder), $queryKey, $event->getValue(), implode(" ", $modalAttribute), $row[$value]);
             
             return $row;
         }, $chart->getDatas($queryBuilder));
