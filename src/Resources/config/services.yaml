@@ -13,6 +13,7 @@ services:
     Kematjaya\ChartBundle\Renderer\PieChartRenderer: ~
     Kematjaya\ChartBundle\Renderer\LineChartRenderer: ~
     Kematjaya\ChartBundle\Renderer\ColumnChartRenderer: ~
+    Kematjaya\ChartBundle\Renderer\BarChartRenderer: ~
         
     Kematjaya\ChartBundle\Twig\ChartExtension:
         tags: ['twig.extension']
