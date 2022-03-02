@@ -17,6 +17,11 @@ use Doctrine\ORM\QueryBuilder;
  */
 class BarChartRenderer extends ColumnChartRenderer 
 {
+    /**
+     * 
+     * @param AbstractChart $chart
+     * @return bool
+     */
     public function isSupported(AbstractChart $chart): bool 
     {
         return AbstractChart::CHART_BAR === $chart->getChartType();
@@ -26,7 +31,7 @@ class BarChartRenderer extends ColumnChartRenderer
      * 
      * @param AbstractChart $chart
      * @param QueryBuilder $qb
-     * @return array array of highchart json
+     * @return array array of highchart json 
      */
     public function toArray(AbstractChart $chart, QueryBuilder $qb): array 
     {
