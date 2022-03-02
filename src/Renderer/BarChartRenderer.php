@@ -22,6 +22,12 @@ class BarChartRenderer extends ColumnChartRenderer
         return AbstractChart::CHART_BAR === $chart->getChartType();
     }
     
+    /**
+     * 
+     * @param AbstractChart $chart
+     * @param QueryBuilder $qb
+     * @return array array of highchart json
+     */
     public function toArray(AbstractChart $chart, QueryBuilder $qb): array 
     {
         $arr = parent::toArray($chart, $qb);
@@ -44,6 +50,5 @@ class BarChartRenderer extends ColumnChartRenderer
         ];
         
         return $arr;
-            
     }
 }
