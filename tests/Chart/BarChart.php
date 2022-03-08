@@ -11,13 +11,14 @@ use Doctrine\ORM\QueryBuilder;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Kematjaya\ChartBundle\Chart\SummaryTableRepositoryInterface;
 use Kematjaya\ChartBundle\Chart\ClickableChartInterface;
+use Kematjaya\ChartBundle\Chart\GroupChartInterface;
 
 /**
  * Description of BarChart
  *
  * @author guest
  */
-class BarChart extends AbstractChart implements SummaryTableRepositoryInterface, ClickableChartInterface 
+class BarChart extends AbstractChart implements GroupChartInterface, SummaryTableRepositoryInterface, ClickableChartInterface 
 {
     //put your code here
     public function getCategories(): array 
@@ -77,6 +78,11 @@ class BarChart extends AbstractChart implements SummaryTableRepositoryInterface,
     public function getURL(QueryBuilder $queryBuilder): string 
     {
         return "foo/bar";
+    }
+
+    public static function getGroups(): array 
+    {
+        return ["test"];
     }
 
 }

@@ -28,8 +28,12 @@ class BundleTest extends WebTestCase
         $this->assertTrue($container->has(ChartDataCompilerInterface::class));
         $compiler = $container->get(ChartDataCompilerInterface::class);
         $this->assertTrue($compiler instanceof HighChartDataCompiler);
-        $charts = $compiler->compileChart([], []);
-        $this->assertEquals(1, $charts->count());
+        $charts1 = $compiler->compileChart([], []);
+        $this->assertEquals(1, $charts1->count());
+        $charts2 = $compiler->compileChart([], ["test"]);
+        $this->assertEquals(1, $charts2->count());
+        $charts3 = $compiler->compileChart([], ["dummy"]);
+        $this->assertTrue($charts3->isEmpty());
     }
     
     public static function getKernelClass() 

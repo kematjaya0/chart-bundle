@@ -7,6 +7,7 @@
 
 namespace Kematjaya\ChartBundle\Compiler;
 
+use Kematjaya\ChartBundle\Chart\GroupChartInterface;
 use Kematjaya\ChartBundle\Chart\ClickableChartInterface;
 use Kematjaya\ChartBundle\Chart\SummaryTableRepositoryInterface;
 use Kematjaya\ChartBundle\Builder\ChartRendererBuilderInterface;
@@ -71,10 +72,11 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
         }
             
         foreach ($this->chartBuilder->getChart($singleRole) as $chart) {
-            if (!$chart instanceof AbstractChart) {
+            
+            if (!$this->isValidObject($chart, $group)) {
                 continue;
             }
-
+            
             $chartRenderer = $this->chartRendererBuilder->getChartRenderer($chart);
 
             $id = md5(date('Y-m-d H:i:s') . rand());
@@ -110,6 +112,31 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
         return $data;
     }
 
+    protected function isValidObject($chart, array $groups = []):bool
+    {
+        if (!$chart instanceof AbstractChart) {
+            return false;
+        }
+
+        if (!$chart instanceof GroupChartInterface) {
+            
+            return true;
+        }
+        
+        if (empty($groups)) {
+            
+            return true;
+        }
+        
+        $className = get_class($chart);
+        $objectGroups = call_user_func([$className, 'getGroups']);
+        $selectedGroups = array_filter($objectGroups, function ($group) use ($groups) {
+            return in_array($group, $groups);
+        });
+        
+        return !empty($selectedGroups);
+    }
+    
     protected function buildTableData(SummaryTableRepositoryInterface $chart, QueryBuilder $queryBuilder):array
     {
         if (!$chart instanceof ClickableChartInterface) {
