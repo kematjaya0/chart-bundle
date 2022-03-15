@@ -1,0 +1,4 @@
+framework:
+    test: true
+    secret: d769a047965880b0264c95856179a45c
+    

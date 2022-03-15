@@ -47,6 +47,7 @@ abstract class AbstractChart
     const CHART_COLUMN = 'column';
     const CHART_LINE = 'line';
     const CHART_PIE = 'pie';
+    const CHART_BAR = 'bar';
     
     
     public function __construct(TranslatorInterface $translator, EntityManagerInterface $entityManager) 

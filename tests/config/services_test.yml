@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+        
+    Doctrine\ORM\EntityManagerInterface:
+        class: Kematjaya\ChartBundle\Tests\Util\EntityManager
+            
+    Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface:
+        class: Kematjaya\ChartBundle\Tests\Util\TokenStorage
+
+    Kematjaya\ChartBundle\Compiler\ChartDataCompilerInterface:
+        class: Kematjaya\ChartBundle\Tests\MockHighChartDataCompiler
+        public: true
+        
+    Kematjaya\ChartBundle\Tests\Chart\BarChart:
+        class: Kematjaya\ChartBundle\Tests\Chart\BarChart
+        tags: 
+            - { name: 'kematjaya.chart' }

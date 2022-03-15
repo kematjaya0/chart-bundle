@@ -13,6 +13,10 @@ services:
     Kematjaya\ChartBundle\Renderer\PieChartRenderer: ~
     Kematjaya\ChartBundle\Renderer\LineChartRenderer: ~
     Kematjaya\ChartBundle\Renderer\ColumnChartRenderer: ~
+    Kematjaya\ChartBundle\Renderer\BarChartRenderer: ~
+    
+    Kematjaya\ChartBundle\Compiler\ChartDataCompilerInterface:
+        class: Kematjaya\ChartBundle\Compiler\HighChartDataCompiler
         
     Kematjaya\ChartBundle\Twig\ChartExtension:
         tags: ['twig.extension']
