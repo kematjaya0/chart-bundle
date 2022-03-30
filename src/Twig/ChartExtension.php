@@ -32,6 +32,9 @@ class ChartExtension extends AbstractExtension
      */
     private $chartDataCompiler;
     
+    const ONLY_CHART = 'only_chart';
+    const DIV_ATTR = 'div_attr';
+    
     public function __construct(Environment $twig, ChartDataCompilerInterface $chartDataCompiler) 
     {
         $this->chartDataCompiler = $chartDataCompiler;
@@ -71,8 +74,15 @@ class ChartExtension extends AbstractExtension
     
     public function render(array $options = [], array $groups = []):?string
     {
+        $options[self::ONLY_CHART] = (isset($options[self::ONLY_CHART])) ? (bool) $options[self::ONLY_CHART] : false;
+        $attributes = isset($options[self::DIV_ATTR]) ? $options[self::DIV_ATTR] : [];
+        array_walk($attributes, function (&$value, $key) {
+            $value = sprintf('%s="%s"', $key, $value);
+        });
         try {
             return $this->twig->render('@Chart/charts.twig', [
+                self::ONLY_CHART => $options[self::ONLY_CHART],
+                self::DIV_ATTR => implode(" ", $attributes),
                 'statistics' => $this->chartDataCompiler->compileChart($options, $groups)
             ]);
         } catch (\Exception $ex) {

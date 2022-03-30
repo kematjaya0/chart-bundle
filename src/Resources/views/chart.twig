@@ -1,3 +1,6 @@
+{% if only_chart %}
+    <div id="container-{{ id }}" {{ div_attr|raw }}></div>
+{% else %}
 <div class="col-sm-{{ statistic.width }}">
     <div class="card">
         <div class="card-header">
@@ -25,7 +28,7 @@
                     {% if statistic.chart %}
                     <div class="tab-pane fade show active" id="chart{{ id }}" role="tabpanel"
                          aria-labelledby="nav-home-tab">
-                        <div id="container-{{ id }}"></div>
+                        <div id="container-{{ id }}" {{ div_attr|raw }}></div>
                     </div>
                     {% endif %}
                     {% if statistic.table %}
@@ -57,6 +60,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% if statistic.chart %}
 <script>
     Highcharts.chart('container-{{ id }}', {{ statistic.chart|replace(statistic.clickable)|raw }});

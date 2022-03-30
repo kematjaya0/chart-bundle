@@ -76,12 +76,9 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
     {
         $data = new ArrayCollection();
         $singleRole = $this->getSingleRole();
-        if (null === $singleRole) {
-
-            return $data;
-        }
+        $charts = (null !== $singleRole) ? $this->chartBuilder->getChart($singleRole) : $this->chartBuilder->getCharts();
             
-        foreach ($this->chartBuilder->getChart($singleRole) as $chart) {
+        foreach ($charts as $chart) {
             
             if (!$this->isValidObject($chart, $group)) {
                 continue;
