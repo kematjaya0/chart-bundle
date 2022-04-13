@@ -23,7 +23,7 @@ class LineChartRenderer extends AbstractChartRenderer
         return [
             "yAxis" => [
                 "title" => [
-                    "text" => $chart->getChartTitle()
+                    "text" => $chart->getTitle()
                 ]
             ],
             "xAxis" => [

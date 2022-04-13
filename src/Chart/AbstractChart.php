@@ -103,6 +103,11 @@ abstract class AbstractChart
         return $this->entityManager->getRepository($className)->createQueryBuilder($alias);
     }
     
+    public function getYTitle():string
+    {
+        return $this->translator->trans("total");
+    }
+    
     abstract public function getSeries(QueryBuilder $qb):array;
     
     abstract public function getQueryBuilder(string $alias = 't', array $params = []): QueryBuilder;
@@ -110,8 +115,4 @@ abstract class AbstractChart
     abstract public function getTitle():string;
     
     abstract public function getCategories():array;
-    
-    abstract public function getChartTitle():string;
-    
-    abstract public function getSequence():int;
 }

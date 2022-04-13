@@ -7,6 +7,7 @@
 
 namespace Kematjaya\ChartBundle\Builder;
 
+use Kematjaya\ChartBundle\Chart\ShorteredChartInterface;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -54,8 +55,12 @@ class ChartBuilder implements ChartBuilderInterface
     {
         $iterator = $this->charts->getIterator();
         $iterator->uasort(function (AbstractChart $a, AbstractChart $b) {
+            if ($a instanceof ShorteredChartInterface) {
+                
+                return $a->getSequence() > $b->getSequence() ? 1 : -1;
+            }
             
-            return $a->getSequence() > $b->getSequence() ? 1 : -1;
+            return $a->getTitle() > $b->getTitle() ? 1 : -1;
         });
         
         return new ArrayCollection(iterator_to_array($iterator));

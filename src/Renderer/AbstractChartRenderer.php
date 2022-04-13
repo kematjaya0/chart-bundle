@@ -34,7 +34,7 @@ abstract class AbstractChartRenderer implements ChartRendererInterface
         
         $chartArray = [
             "title" => [
-                "text" => $chart->getChartTitle()
+                "text" => $chart->getTitle()
             ],
             "subtitle" => [
                 "text" => ''
