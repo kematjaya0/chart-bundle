@@ -55,7 +55,7 @@ class ChartBuilder implements ChartBuilderInterface
     {
         $iterator = $this->charts->getIterator();
         $iterator->uasort(function (AbstractChart $a, AbstractChart $b) {
-            if ($a instanceof ShorteredChartInterface) {
+            if ($a instanceof ShorteredChartInterface and $b instanceof ShorteredChartInterface) {
                 
                 return $a->getSequence() > $b->getSequence() ? 1 : -1;
             }
