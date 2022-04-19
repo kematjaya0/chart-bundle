@@ -53,17 +53,30 @@ class ChartBuilder implements ChartBuilderInterface
 
     public function getCharts(): Collection 
     {
-        $iterator = $this->charts->getIterator();
-        $iterator->uasort(function (AbstractChart $a, AbstractChart $b) {
-            if ($a instanceof ShorteredChartInterface and $b instanceof ShorteredChartInterface) {
-                
-                return $a->getSequence() > $b->getSequence() ? 1 : -1;
-            }
+        $shorts = $this->charts->filter(function (AbstractChart $chart) {
             
-            return $a->getTitle() > $b->getTitle() ? 1 : -1;
+            return $chart instanceof ShorteredChartInterface;
+        });
+        $nonShort = $this->charts->filter(function (AbstractChart $chart) {
+            
+            return !$chart instanceof ShorteredChartInterface;
         });
         
-        return new ArrayCollection(iterator_to_array($iterator));
+        $data = array_merge(iterator_to_array($this->short($shorts, function (AbstractChart $a, AbstractChart $b) {
+            return $a->getSequence() > $b->getSequence() ? 1 : -1;
+        })), $nonShort->toArray());
+        
+        return new ArrayCollection($data);
     }
 
+    protected function short(Collection $charts, callable $callback): \Traversable
+    {
+        $iterator = $charts->getIterator();
+        $iterator->uasort(function (AbstractChart $a, AbstractChart $b) use ($callback) {
+            
+            return call_user_func($callback, $a, $b);
+        });
+        
+        return $iterator;
+    }
 }
