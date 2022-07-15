@@ -84,41 +84,48 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
                 continue;
             }
             
-            $chartRenderer = $this->chartRendererBuilder->getChartRenderer($chart);
-
             $id = md5(date('Y-m-d H:i:s') . rand());
-            $qb = $chart->getQueryBuilder('t', isset($options['filter']) ? $options['filter'] : []);
-            $graph = json_encode(
-                $chartRenderer->render($chart, $qb)
-            );
-            
-            $table = null;
-            if ($chart instanceof SummaryTableRepositoryInterface) {
-                $table = [
-                    'header' => $chart->getHeaders(),
-                    'data' => $this->buildTableData($chart, $qb)
-                ];
-            }
 
-            $clickableLink = [];
-            if ($chart instanceof ClickableChartInterface) {
-                $clickableLink['"%func%"'] = $this->buildClickPoint($chart, $qb);
-            }
-
-            $data->offsetSet($id, [
-                'title' => $chart->getTitle(),
-                'id' => $id,
-                'chart' => $graph,
-                'table' => $table,
-                'table_active' => $chart ? '' : 'active',
-                'width' => $chart->getWidth(),
-                'clickable' => $clickableLink
-            ]);
+            $data->offsetSet($id, $this->render($id, $chart, $options));
         }
             
         return $data;
     }
 
+    protected function render(string $id, AbstractChart $chart, array $options):array
+    {
+        $chartRenderer = $this->chartRendererBuilder->getChartRenderer($chart);
+
+        
+        $qb = $chart->getQueryBuilder('t', isset($options['filter']) ? $options['filter'] : []);
+        $graph = json_encode(
+            $chartRenderer->render($chart, $qb)
+        );
+
+        $table = null;
+        if ($chart instanceof SummaryTableRepositoryInterface) {
+            $table = [
+                'header' => $chart->getHeaders(),
+                'data' => $this->buildTableData($chart, $qb)
+            ];
+        }
+
+        $clickableLink = [];
+        if ($chart instanceof ClickableChartInterface) {
+            $clickableLink['"%func%"'] = $this->buildClickPoint($chart, $qb);
+        }
+        
+        return [
+            'title' => $chart->getTitle(),
+            'id' => $id,
+            'chart' => $graph,
+            'table' => $table,
+            'table_active' => $chart ? '' : 'active',
+            'width' => $chart->getWidth(),
+            'clickable' => $clickableLink
+        ];
+    }
+    
     protected function isValidObject($chart, array $groups = []):bool
     {
         if (!$chart instanceof AbstractChart) {
