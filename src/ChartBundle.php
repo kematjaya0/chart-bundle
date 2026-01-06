@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class ChartBundle extends Bundle
 {
-    public function build(ContainerBuilder $container) 
+    public function build(ContainerBuilder $container) :void
     {
         $container->registerForAutoconfiguration(AbstractChart::class)
                 ->addTag(AbstractChart::TAG_NAME);

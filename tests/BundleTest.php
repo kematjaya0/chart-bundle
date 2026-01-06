@@ -15,10 +15,11 @@ class BundleTest extends WebTestCase
 {
     public function testInitBundle(): ContainerInterface
     {
-        $container = static::getContainer();
-        
+        $client = static::createClient();
+        $container = $client->getContainer();
+
         $this->assertInstanceOf(ContainerInterface::class, $container);
-        
+
         return $container;
     }
     
@@ -36,7 +37,7 @@ class BundleTest extends WebTestCase
         $this->assertTrue($charts3->isEmpty());
     }
     
-    public static function getKernelClass() 
+    public static function getKernelClass() :string
     {
         return AppKernel::class;
     }

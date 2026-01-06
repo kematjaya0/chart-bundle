@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class AppKernel extends Kernel 
 {
-    public function registerBundles()
+    public function registerBundles():iterable
     {
         return [
             new ChartBundle(),
@@ -24,7 +24,7 @@ class AppKernel extends Kernel
         ];
     }
     
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader):void
     {
         $loader->load(function (ContainerBuilder $container) use ($loader) 
         {

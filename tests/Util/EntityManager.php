@@ -141,7 +141,7 @@ class EntityManager implements EntityManagerInterface
         
     }
 
-    public function hasFilters(): boolean {
+    public function hasFilters(): bool {
         
     }
 
@@ -149,7 +149,7 @@ class EntityManager implements EntityManagerInterface
         
     }
 
-    public function isFiltersStateClean(): boolean {
+    public function isFiltersStateClean(): bool {
         
     }
 

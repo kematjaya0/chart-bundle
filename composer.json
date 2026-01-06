@@ -10,9 +10,9 @@
     ],
     "require": {
         "doctrine/collections": "^1.6",
-        "symfony/twig-bundle": "^5.3",
-        "kematjaya/user-bundle": "^4.2",
-        "symfony/event-dispatcher": "^5.3"
+        "symfony/twig-bundle": "^7.4",
+        "kematjaya/user-bundle": "^7.0-BETA",
+        "symfony/event-dispatcher": "^7.4"
     },
     "autoload": {
         "psr-4": {
@@ -25,7 +25,9 @@
         }
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^6.0",
-        "symfony/framework-bundle": "^5.4"
+        "symfony/phpunit-bridge": "^8.0",
+        "symfony/framework-bundle": "^7.4",
+        "phpunit/phpunit": "^9.0",
+        "symfony/browser-kit": "^8.0"
     }
 }

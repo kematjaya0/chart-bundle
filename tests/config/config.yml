@@ -1,4 +1,11 @@
 framework:
     test: true
     secret: d769a047965880b0264c95856179a45c
+    property_info:
+        with_constructor_extractor: true
+security:
+    role_hierarchy: []
+    firewalls:
+        dev:
+            security: false
     
