@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "doctrine/collections": "^1.6",
+        "doctrine/collections": "^2.2",
         "symfony/twig-bundle": "^7.4",
         "kematjaya/user-bundle": "^7.0-BETA",
         "symfony/event-dispatcher": "^7.4"
