@@ -6,33 +6,39 @@ use Kematjaya\ChartBundle\ChartBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
-use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
 class AppKernel extends Kernel 
 {
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         return [
-            new ChartBundle(),
+            new FrameworkBundle(),
             new TwigBundle(),
-            new SecurityBundle(),
-            new FrameworkBundle()
+            new ChartBundle(),
         ];
     }
     
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(function (ContainerBuilder $container) use ($loader) 
-        {
-            $loader->load(__DIR__ . DIRECTORY_SEPARATOR . 'config/config.yml');
-            $loader->load(__DIR__ . DIRECTORY_SEPARATOR . 'config/services_test.yml');
-            $loader->load(__DIR__ . DIRECTORY_SEPARATOR . 'config/bundle.yml');
-            
-            $container->addObjectResource($this);
-        });
+        $loader->load(__DIR__ . '/config/config.yaml');
+    }
+
+    public function getProjectDir(): string
+    {
+        return __DIR__;
+    }
+
+    public function getCacheDir(): string
+    {
+        return sys_get_temp_dir() . '/chart-bundle/cache/' . $this->environment;
+    }
+
+    public function getLogDir(): string
+    {
+        return sys_get_temp_dir() . '/chart-bundle/log';
     }
 }

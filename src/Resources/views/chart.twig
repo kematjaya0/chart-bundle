@@ -11,13 +11,13 @@
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         {% if statistic.chart %}
-                        <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#chart{{ id }}" role="tab"
+                        <a class="nav-link active" id="nav-home-tab" data-toggle="tab" data-bs-toggle="tab" href="#chart{{ id }}" role="tab"
                            aria-controls="nav-home" aria-selected="true">
                             {{ 'chart'|trans }}
                         </a>
                         {% endif %}
                         {% if statistic.table %}
-                        <a class="nav-link {{ statistic.table_active }}" id="nav-home-tab" data-toggle="tab" href="#table{{ id }}" role="tab"
+                        <a class="nav-link {{ statistic.table_active }}" id="nav-home-tab" data-toggle="tab" data-bs-toggle="tab" href="#table{{ id }}" role="tab"
                            aria-controls="nav-home" aria-selected="true">
                             {{ 'table'|trans }}
                         </a>

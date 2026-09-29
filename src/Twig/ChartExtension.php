@@ -41,7 +41,7 @@ class ChartExtension extends AbstractExtension
         $this->twig = $twig;
     }
     
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('chart_stylesheet', [$this, 'renderCSS'], ['is_safe' => ['html']]),

@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class ChartCompilerPass implements CompilerPassInterface 
 {
-    public function process(ContainerBuilder $container) 
+    public function process(ContainerBuilder $container): void
     {
         $definition = $container->findDefinition(ChartBuilderInterface::class);
         $taggedServices = $container->findTaggedServiceIds(AbstractChart::TAG_NAME);

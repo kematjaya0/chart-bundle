@@ -1,10 +1,5 @@
 <?php
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
- */
-
 namespace Kematjaya\ChartBundle\Tests\Chart;
 
 use Doctrine\ORM\QueryBuilder;
@@ -12,23 +7,16 @@ use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Kematjaya\ChartBundle\Chart\SummaryTableRepositoryInterface;
 use Kematjaya\ChartBundle\Chart\ClickableChartInterface;
 use Kematjaya\ChartBundle\Chart\GroupChartInterface;
+use Kematjaya\ChartBundle\Chart\ShorteredChartInterface;
 
 /**
- * Description of BarChart
- *
- * @author guest
+ * Chart column dengan tabel & klik (grup "test")
  */
-class BarChart extends AbstractChart implements GroupChartInterface, SummaryTableRepositoryInterface, ClickableChartInterface 
+class BarChart extends AbstractChart implements GroupChartInterface, SummaryTableRepositoryInterface, ClickableChartInterface, ShorteredChartInterface
 {
-    //put your code here
     public function getCategories(): array 
     {
-        return [];
-    }
-
-    public function getChartTitle(): string 
-    {
-        return "test";
+        return ['Jan', 'Feb'];
     }
 
     public function getQueryBuilder(string $alias = 't', array $params = []): QueryBuilder 
@@ -38,31 +26,30 @@ class BarChart extends AbstractChart implements GroupChartInterface, SummaryTabl
 
     public function getSequence(): int 
     {
-        return 1;
+        return 2;
     }
 
     public function getSeries(QueryBuilder $qb): array 
     {
-        return [];
+        return [['name' => 'total', 'data' => [1, 2]]];
     }
 
     public function getTitle(): string 
     {
-        return $this->getChartTitle();
+        return "Bar test";
     }
 
     public function getDatas(QueryBuilder $qb): array 
     {
         return [
-            [1], [2], [3]
+            ['label' => 'Toko A&B', 'total' => 1],
+            ['label' => null, 'total' => 2],
         ];
     }
 
     public function getHeaders(): array 
     {
-        return [
-            "test"
-        ];
+        return ["label", "total"];
     }
 
     public function getModalDOMId(): ?string 
@@ -84,5 +71,4 @@ class BarChart extends AbstractChart implements GroupChartInterface, SummaryTabl
     {
         return ["test"];
     }
-
 }

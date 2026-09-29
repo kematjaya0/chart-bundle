@@ -19,7 +19,7 @@ use Symfony\Component\Config\FileLocator;
 class ChartExtension extends Extension
 {
     
-    public function load(array $configs, ContainerBuilder $container) 
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader(
             $container, 

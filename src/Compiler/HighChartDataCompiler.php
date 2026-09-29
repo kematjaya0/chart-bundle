@@ -21,7 +21,6 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Kematjaya\UserBundle\Entity\DefaultUser;
 
 /**
  * Description of HighChartDataCompiler
@@ -84,7 +83,7 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
                 continue;
             }
             
-            $id = md5(date('Y-m-d H:i:s') . rand());
+            $id = bin2hex(random_bytes(16));
 
             $data->offsetSet($id, $this->render($id, $chart, $options));
         }
@@ -101,6 +100,9 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
         $graph = json_encode(
             $chartRenderer->render($chart, $qb)
         );
+        if (false === $graph) {
+            throw new \Exception(sprintf("cannot encode chart '%s': %s", get_class($chart), json_last_error_msg()));
+        }
 
         $table = null;
         if ($chart instanceof SummaryTableRepositoryInterface) {
@@ -120,7 +122,7 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
             'id' => $id,
             'chart' => $graph,
             'table' => $table,
-            'table_active' => $chart ? '' : 'active',
+            'table_active' => $graph ? '' : 'active',
             'width' => $chart->getWidth(),
             'clickable' => $clickableLink
         ];
@@ -161,8 +163,11 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
         return array_map(function (array $row) use ($chart, $queryBuilder) {
             $modalAttribute = [];
             if ($chart->getModalDOMId()) {
+                // bootstrap 4 (data-*) dan bootstrap 5 (data-bs-*)
                 $modalAttribute[] = 'data-toggle="modal"';
                 $modalAttribute[] = sprintf('data-target="%s"', $chart->getModalDOMId());
+                $modalAttribute[] = 'data-bs-toggle="modal"';
+                $modalAttribute[] = sprintf('data-bs-target="%s"', $chart->getModalDOMId());
             }
             
             $keys = array_keys($row);
@@ -170,10 +175,10 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
             $value = $keys[count($keys) - 1];
             $queryKey = null !== $chart->getQueryKey() ? $chart->getQueryKey() : 'q';
             
-            $event = $this->eventDispatcher->dispatch(
-                new PreBuildTableLinkEvent($queryBuilder, $chart, $row[$label])
+            $event = $this->dispatchPreBuildTableLink(
+                new PreBuildTableLinkEvent($queryBuilder, $chart, (string) $row[$label])
             );
-            $row[$value] = sprintf('<a href="%s?%s=%s" %s>%s</a>', $chart->getURL($queryBuilder), $queryKey, $event->getValue(), implode(" ", $modalAttribute), $row[$value]);
+            $row[$value] = sprintf('<a href="%s?%s=%s" %s>%s</a>', $chart->getURL($queryBuilder), rawurlencode($queryKey), rawurlencode($event->getValue()), implode(" ", $modalAttribute), $row[$value]);
             
             return $row;
         }, $chart->getDatas($queryBuilder));
@@ -186,6 +191,7 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
             if (typeof query == "undefined") {
                 query = event.point.name;
             }
+            query = encodeURIComponent(query);
             %s
         }';
         
@@ -232,14 +238,33 @@ class HighChartDataCompiler implements ChartDataCompilerInterface
             return null;
         }
         
-        if ($user instanceof DefaultUser) {
+        // mis. Kematjaya\UserBundle\Entity\DefaultUser
+        if (method_exists($user, 'getSingleRole')) {
             
             return $user->getSingleRole();
         }
         
         $roles = $user->getRoles();
+        if (empty($roles)) {
+            
+            return null;
+        }
         
-        return end($roles);
+        return (string) end($roles);
+    }
+    
+    /**
+     * Dispatch with PreBuildTableLinkEvent::EVENT_NAME, listeners registered with the class name
+     * (default dispatcher name) still receive the event
+     */
+    protected function dispatchPreBuildTableLink(PreBuildTableLinkEvent $event): PreBuildTableLinkEvent
+    {
+        $event = $this->eventDispatcher->dispatch($event, PreBuildTableLinkEvent::EVENT_NAME);
+        if ($this->eventDispatcher->hasListeners(PreBuildTableLinkEvent::class)) {
+            $event = $this->eventDispatcher->dispatch($event, PreBuildTableLinkEvent::class);
+        }
+        
+        return $event;
     }
 
 }

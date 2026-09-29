@@ -1,4 +1,5 @@
 # chart-bundle
+Branch `6.4`: Symfony 6.4, PHP >= 8.1.
 - installation
   ```
   composer require kematjaya/chart-bundle
@@ -105,3 +106,14 @@
     }
 
     ```
+
+- event
+  - `PreBuildTableLinkEvent::EVENT_NAME` (juga nama class): ubah nilai query link tabel
+  - `ChartPointClickCreatedEvent::EVENT_NAME`: ubah fungsi javascript saat titik chart diklik
+- role: chart dengan `getRoles()` hanya tampil untuk role user yang login
+  (`getSingleRole()` jika user punya method tersebut, mis. `kematjaya/user-bundle`, selain itu role terakhir)
+
+## Test
+```
+sh docker/test.sh all
+```

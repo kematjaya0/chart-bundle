@@ -1,0 +1,26 @@
+framework:
+    test: true
+    secret: test
+    http_method_override: false
+    handle_all_throwables: true
+    php_errors:
+        log: true
+    assets: ~
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Doctrine\ORM\EntityManagerInterface:
+        synthetic: true
+
+    Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface:
+        class: Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage
+
+    Kematjaya\ChartBundle\Tests\Chart\BarChart: ~
+    Kematjaya\ChartBundle\Tests\Chart\PieChart: ~
+    Kematjaya\ChartBundle\Tests\Chart\AdminLineChart: ~
