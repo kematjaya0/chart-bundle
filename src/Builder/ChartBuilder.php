@@ -7,10 +7,10 @@
 
 namespace Kematjaya\ChartBundle\Builder;
 
-use Kematjaya\ChartBundle\Chart\ShorteredChartInterface;
-use Kematjaya\ChartBundle\Chart\AbstractChart;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Kematjaya\ChartBundle\Chart\AbstractChart;
+use Kematjaya\ChartBundle\Chart\ShorteredChartInterface;
 
 /**
  * Description of ChartBuilder
@@ -19,64 +19,49 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ChartBuilder implements ChartBuilderInterface
 {
-    /**
-     * 
-     * @var Collection
-     */
-    private $charts;
-    
-    public function __construct() 
+    private readonly ArrayCollection $charts;
+
+    public function __construct()
     {
         $this->charts = new ArrayCollection();
     }
-    
-    public function addChart(AbstractChart $element): ChartBuilderInterface 
+
+    public function addChart(AbstractChart $element): ChartBuilderInterface
     {
         if (!$this->charts->contains($element)) {
             $this->charts->add($element);
         }
-        
+
         return $this;
     }
 
-    public function getChart(string $role): Collection 
+    public function getChart(string $role): Collection
     {
-        return $this->getCharts()->filter(function (AbstractChart $chart) use ($role) {
+        return $this->getCharts()->filter(function (AbstractChart $chart) use ($role): AbstractChart|bool {
             if (empty($chart->getRoles())) {
-                
+
                 return $chart;
             }
-            
+
             return in_array($role, $chart->getRoles());
         });
     }
 
-    public function getCharts(): Collection 
+    public function getCharts(): Collection
     {
-        $shorts = $this->charts->filter(function (AbstractChart $chart) {
-            
-            return $chart instanceof ShorteredChartInterface;
-        });
-        $nonShort = $this->charts->filter(function (AbstractChart $chart) {
-            
-            return !$chart instanceof ShorteredChartInterface;
-        });
-        
-        $data = array_merge(iterator_to_array($this->short($shorts, function (AbstractChart $a, AbstractChart $b) {
-            return $a->getSequence() > $b->getSequence() ? 1 : -1;
-        })), $nonShort->toArray());
-        
+        $shorts = $this->charts->filter(fn(AbstractChart $chart): bool => $chart instanceof ShorteredChartInterface);
+        $nonShort = $this->charts->filter(fn(AbstractChart $chart): bool => !$chart instanceof ShorteredChartInterface);
+
+        $data = array_merge(iterator_to_array($this->short($shorts, fn(AbstractChart $a, AbstractChart $b): int => $a->getSequence() > $b->getSequence() ? 1 : -1)), $nonShort->toArray());
+
         return new ArrayCollection($data);
     }
 
     protected function short(Collection $charts, callable $callback): \Traversable
     {
         $iterator = $charts->getIterator();
-        $iterator->uasort(function (AbstractChart $a, AbstractChart $b) use ($callback) {
-            
-            return call_user_func($callback, $a, $b);
-        });
-        
+        $iterator->uasort(fn(AbstractChart $a, AbstractChart $b) => call_user_func($callback, $a, $b));
+
         return $iterator;
     }
 }

@@ -8,10 +8,9 @@
 namespace Kematjaya\ChartBundle\Chart;
 
 /**
- *
  * @author guest
  */
-interface GroupChartInterface 
+interface GroupChartInterface
 {
-    public static function getGroups():array;
+    public static function getGroups(): array;
 }

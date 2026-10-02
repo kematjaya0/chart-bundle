@@ -7,8 +7,8 @@
 
 namespace Kematjaya\ChartBundle\Renderer;
 
-use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Doctrine\ORM\QueryBuilder;
+use Kematjaya\ChartBundle\Chart\AbstractChart;
 
 /**
  * Description of ColumnChartRenderer
@@ -17,26 +17,26 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ColumnChartRenderer extends AbstractChartRenderer
 {
-    public function isSupported(AbstractChart $chart): bool 
+    public function isSupported(AbstractChart $chart): bool
     {
         return AbstractChart::CHART_COLUMN === $chart->getChartType();
     }
 
-    public function toArray(AbstractChart $chart, QueryBuilder $qb): array 
+    public function toArray(AbstractChart $chart, QueryBuilder $qb): array
     {
         return [
             "chart" => [
-                "type" => $chart->getChartType()
+                "type" => $chart->getChartType(),
             ],
             "xAxis" => [
                 "categories" => $chart->getCategories(),
-                "crosshair" => true
+                "crosshair" => true,
             ],
             "yAxis" => [
                 "min" => 0,
                 "title" => [
-                    "text" => ''
-                ]
+                    "text" => '',
+                ],
             ],
             "tooltip" => [
                 "headerFormat" => '<span style="font-size:10px">{point.key}</span><table>',
@@ -44,16 +44,16 @@ class ColumnChartRenderer extends AbstractChartRenderer
                     . '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
                 "footerFormat" => '</table>',
                 "shared" => true,
-                "useHTML" => true
+                "useHTML" => true,
             ],
             "plotOptions" => [
                 "column" => [
                     "pointPadding" => 0.2,
-                    "borderWidth" => 0
-                ]
-            ]
+                    "borderWidth" => 0,
+                ],
+            ],
         ];
-            
+
     }
 
 }

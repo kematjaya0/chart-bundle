@@ -10,14 +10,13 @@ namespace Kematjaya\ChartBundle\Chart;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- *
  * @author guest
  */
-interface ClickableChartInterface 
+interface ClickableChartInterface
 {
-    public function getURL(QueryBuilder $queryBuilder):string;
-    
-    public function getModalDOMId():?string;
-    
-    public function getQueryKey():?string;
+    public function getURL(QueryBuilder $queryBuilder): string;
+
+    public function getModalDOMId(): ?string;
+
+    public function getQueryKey(): ?string;
 }

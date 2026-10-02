@@ -10,12 +10,11 @@ namespace Kematjaya\ChartBundle\Chart;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- *
  * @author guest
  */
-interface SummaryTableRepositoryInterface 
+interface SummaryTableRepositoryInterface
 {
-    public function getHeaders():array;
-    
-    public function getDatas(QueryBuilder $qb):array;
+    public function getHeaders(): array;
+
+    public function getDatas(QueryBuilder $qb): array;
 }

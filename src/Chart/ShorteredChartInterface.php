@@ -8,10 +8,9 @@
 namespace Kematjaya\ChartBundle\Chart;
 
 /**
- *
  * @author guest
  */
-interface ShorteredChartInterface 
+interface ShorteredChartInterface
 {
-    public function getSequence():int;
+    public function getSequence(): int;
 }

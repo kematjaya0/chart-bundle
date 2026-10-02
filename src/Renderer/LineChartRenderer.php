@@ -7,8 +7,8 @@
 
 namespace Kematjaya\ChartBundle\Renderer;
 
-use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Doctrine\ORM\QueryBuilder;
+use Kematjaya\ChartBundle\Chart\AbstractChart;
 
 /**
  * Description of LineChartRenderer
@@ -17,53 +17,52 @@ use Doctrine\ORM\QueryBuilder;
  */
 class LineChartRenderer extends AbstractChartRenderer
 {
-    
-    protected function toArray(AbstractChart $chart, QueryBuilder $qb): array 
+    protected function toArray(AbstractChart $chart, QueryBuilder $qb): array
     {
         return [
             "yAxis" => [
                 "title" => [
-                    "text" => $chart->getTitle()
-                ]
+                    "text" => $chart->getTitle(),
+                ],
             ],
             "xAxis" => [
                 "accessibility" => [
-                    "rangeDescription" => ''
+                    "rangeDescription" => '',
                 ],
-                "categories" => $chart->getCategories()
+                "categories" => $chart->getCategories(),
             ],
             "legend" => [
                 "layout" => 'vertical',
                 "align" => 'right',
-                "verticalAlign" => 'middle'
+                "verticalAlign" => 'middle',
             ],
             "plotOptions" => [
                 "series" => [
                     "label" => [
-                        "connectorAllowed" => false
-                    ]
-                ]
+                        "connectorAllowed" => false,
+                    ],
+                ],
             ],
             "responsive" => [
                 "rules" => [
                     [
                         "condition" => [
-                            "maxWidth" => 500
+                            "maxWidth" => 500,
                         ],
                         "chartOptions" => [
                             "legend" => [
                                 "layout" => 'horizontal',
                                 "align" => 'center',
-                                "verticalAlign" => 'bottom'
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                "verticalAlign" => 'bottom',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
-    public function isSupported(AbstractChart $chart): bool 
+    public function isSupported(AbstractChart $chart): bool
     {
         return AbstractChart::CHART_LINE === $chart->getChartType();
     }

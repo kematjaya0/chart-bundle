@@ -2,8 +2,8 @@
 
 namespace Kematjaya\ChartBundle\Tests\Chart;
 
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Kematjaya\ChartBundle\Chart\ShorteredChartInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;

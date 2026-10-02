@@ -7,12 +7,12 @@
 
 namespace Kematjaya\ChartBundle;
 
-use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
-use Kematjaya\ChartBundle\CompilerPass\ChartRendererCompilerPass;
 use Kematjaya\ChartBundle\CompilerPass\ChartCompilerPass;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Kematjaya\ChartBundle\CompilerPass\ChartRendererCompilerPass;
+use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Description of ChartBundle
@@ -27,10 +27,10 @@ class ChartBundle extends Bundle
                 ->addTag(AbstractChart::TAG_NAME);
         $container->registerForAutoconfiguration(ChartRendererInterface::class)
                 ->addTag(ChartRendererInterface::TAG_NAME);
-        
+
         $container->addCompilerPass(new ChartCompilerPass());
         $container->addCompilerPass(new ChartRendererCompilerPass());
-        
+
         parent::build($container);
     }
 }

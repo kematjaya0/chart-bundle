@@ -115,5 +115,5 @@ Branch `6.4`: Symfony 6.4, PHP >= 8.1.
 
 ## Test
 ```
-sh docker/test.sh all
+sh ../test.sh chart-bundle all
 ```

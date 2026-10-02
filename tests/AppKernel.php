@@ -3,15 +3,15 @@
 namespace Kematjaya\ChartBundle\Tests;
 
 use Kematjaya\ChartBundle\ChartBundle;
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
-class AppKernel extends Kernel 
+class AppKernel extends Kernel
 {
     public function registerBundles(): iterable
     {
@@ -21,7 +21,7 @@ class AppKernel extends Kernel
             new ChartBundle(),
         ];
     }
-    
+
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__ . '/config/config.yaml');

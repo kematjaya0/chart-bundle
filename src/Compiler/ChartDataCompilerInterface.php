@@ -10,14 +10,13 @@ namespace Kematjaya\ChartBundle\Compiler;
 use Doctrine\Common\Collections\Collection;
 
 /**
- *
  * @author guest
  */
-interface ChartDataCompilerInterface 
+interface ChartDataCompilerInterface
 {
-    public function getStylesheetPath():?string;
-    
-    public function getJavascriptPath():?string;
-    
-    public function compileChart(array $options = [], array $group = []):Collection;
+    public function getStylesheetPath(): ?string;
+
+    public function getJavascriptPath(): ?string;
+
+    public function compileChart(array $options = [], array $group = []): Collection;
 }

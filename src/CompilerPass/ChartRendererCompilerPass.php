@@ -7,8 +7,8 @@
 
 namespace Kematjaya\ChartBundle\CompilerPass;
 
-use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
 use Kematjaya\ChartBundle\Builder\ChartRendererBuilderInterface;
+use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -20,7 +20,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class ChartRendererCompilerPass implements CompilerPassInterface
 {
-    
     public function process(ContainerBuilder $container): void
     {
         $definition = $container->findDefinition(ChartRendererBuilderInterface::class);

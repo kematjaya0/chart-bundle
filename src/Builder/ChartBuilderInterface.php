@@ -7,14 +7,13 @@
 
 namespace Kematjaya\ChartBundle\Builder;
 
-use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Doctrine\Common\Collections\Collection;
+use Kematjaya\ChartBundle\Chart\AbstractChart;
 
 /**
- *
  * @author guest
  */
-interface ChartBuilderInterface 
+interface ChartBuilderInterface
 {
     public function addChart(AbstractChart $element): self;
 

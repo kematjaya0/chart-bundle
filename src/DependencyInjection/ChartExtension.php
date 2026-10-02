@@ -6,10 +6,10 @@
 
 namespace Kematjaya\ChartBundle\DependencyInjection;
 
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * @package Kematjaya\StepBundle\DependencyInjection
@@ -18,11 +18,10 @@ use Symfony\Component\Config\FileLocator;
  */
 class ChartExtension extends Extension
 {
-    
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader(
-            $container, 
+            $container,
             new FileLocator(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resources/config')
         );
         $loader->load('services.yaml');

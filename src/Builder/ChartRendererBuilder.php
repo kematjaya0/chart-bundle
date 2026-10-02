@@ -7,10 +7,10 @@
 
 namespace Kematjaya\ChartBundle\Builder;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Description of ChartRendererBuilder
@@ -19,42 +19,35 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ChartRendererBuilder implements ChartRendererBuilderInterface
 {
-    /**
-     * 
-     * @var Collection
-     */
-    private $elements;
-    
-    public function __construct() 
+    private readonly ArrayCollection $elements;
+
+    public function __construct()
     {
         $this->elements = new ArrayCollection();
     }
-    
-    public function addChartRenderer(ChartRendererInterface $element): ChartRendererBuilderInterface 
+
+    public function addChartRenderer(ChartRendererInterface $element): ChartRendererBuilderInterface
     {
         if (!$this->elements->contains($element)) {
             $this->elements->add($element);
         }
-        
+
         return $this;
     }
 
-    public function getChartRenderer(AbstractChart $chart): ChartRendererInterface 
+    public function getChartRenderer(AbstractChart $chart): ChartRendererInterface
     {
-        $elements = $this->elements->filter(function (ChartRendererInterface $element) use ($chart) {
-            
-            return $element->isSupported($chart);
-        });
-        
+        $elements = $this->elements->filter(fn(ChartRendererInterface $element): bool => $element->isSupported($chart));
+
         if ($elements->isEmpty()) {
-            
-            throw new \Exception(sprintf("doesn't support for '%s' class", get_class($chart)));
+
+            throw new \Exception(sprintf("doesn't support for '%s' class", $chart::class));
         }
-        
+
         return $elements->first();
     }
 
-    public function getChartRenderers(): Collection 
+    public function getChartRenderers(): Collection
     {
         return $this->elements;
     }

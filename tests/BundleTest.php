@@ -3,10 +3,11 @@
 namespace Kematjaya\ChartBundle\Tests;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Kematjaya\ChartBundle\Compiler\HighChartDataCompiler;
 use Kematjaya\ChartBundle\Compiler\ChartDataCompilerInterface;
-use Kematjaya\ChartBundle\Event\PreBuildTableLinkEvent;
+use Kematjaya\ChartBundle\Compiler\HighChartDataCompiler;
 use Kematjaya\ChartBundle\Event\ChartPointClickCreatedEvent;
+use Kematjaya\ChartBundle\Event\PreBuildTableLinkEvent;
+use Kematjaya\UserBundle\Entity\DefaultUser;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -16,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
-class BundleTest extends KernelTestCase 
+class BundleTest extends KernelTestCase
 {
     protected static function getKernelClass(): string
     {
@@ -43,7 +44,7 @@ class BundleTest extends KernelTestCase
         return $titles;
     }
 
-    public function testChartCompiler()
+    public function testChartCompiler(): void
     {
         $container = static::getContainer();
         $compiler = $container->get(ChartDataCompilerInterface::class);
@@ -56,7 +57,7 @@ class BundleTest extends KernelTestCase
         $this->assertSame(['Pie test', 'Admin line'], $this->titles($compiler->compileChart([], ["dummy"])));
     }
 
-    public function testChartByRole()
+    public function testChartByRole(): void
     {
         $compiler = static::getContainer()->get(ChartDataCompilerInterface::class);
 
@@ -71,7 +72,7 @@ class BundleTest extends KernelTestCase
         $this->assertCount(3, $compiler->compileChart());
     }
 
-    public function testSingleRoleUser()
+    public function testSingleRoleUser(): void
     {
         $this->login(new SingleRoleUser('ROLE_ADMIN'));
         $charts = static::getContainer()->get(ChartDataCompilerInterface::class)->compileChart();
@@ -79,13 +80,13 @@ class BundleTest extends KernelTestCase
         $this->assertContains('Admin line', $this->titles($charts));
     }
 
-    public function testUserBundleDefaultUser()
+    public function testUserBundleDefaultUser(): void
     {
-        if (!class_exists(\Kematjaya\UserBundle\Entity\DefaultUser::class)) {
+        if (!class_exists(DefaultUser::class)) {
             $this->markTestSkipped('kematjaya/user-bundle tidak terpasang');
         }
 
-        $user = (new \Kematjaya\UserBundle\Entity\DefaultUser())
+        $user = (new DefaultUser())
             ->setUsername('admin')
             ->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
         $this->login($user);
@@ -93,7 +94,7 @@ class BundleTest extends KernelTestCase
         $this->assertContains('Admin line', $this->titles(static::getContainer()->get(ChartDataCompilerInterface::class)->compileChart()));
     }
 
-    public function testTableAndClick()
+    public function testTableAndClick(): void
     {
         $charts = array_values(static::getContainer()->get(ChartDataCompilerInterface::class)->compileChart()->toArray());
         $bar = $charts[1];
@@ -110,16 +111,16 @@ class BundleTest extends KernelTestCase
         $this->assertSame(6.0, $charts[0]['width']);
     }
 
-    public function testEvents()
+    public function testEvents(): void
     {
         $dispatcher = static::getContainer()->get('event_dispatcher');
-        $dispatcher->addListener(PreBuildTableLinkEvent::EVENT_NAME, function (PreBuildTableLinkEvent $event) {
+        $dispatcher->addListener(PreBuildTableLinkEvent::EVENT_NAME, function (PreBuildTableLinkEvent $event): void {
             $event->setValue('by-name-' . $event->getValue());
         });
-        $dispatcher->addListener(PreBuildTableLinkEvent::class, function (PreBuildTableLinkEvent $event) {
+        $dispatcher->addListener(PreBuildTableLinkEvent::class, function (PreBuildTableLinkEvent $event): void {
             $event->setValue($event->getValue() . '-by-class');
         });
-        $dispatcher->addListener(ChartPointClickCreatedEvent::EVENT_NAME, function (ChartPointClickCreatedEvent $event) {
+        $dispatcher->addListener(ChartPointClickCreatedEvent::EVENT_NAME, function (ChartPointClickCreatedEvent $event): void {
             $event->setValue('function () {}');
         });
 
@@ -129,7 +130,7 @@ class BundleTest extends KernelTestCase
         $this->assertSame('function () {}', $charts[1]['clickable']['"%func%"']);
     }
 
-    public function testRenderTwig()
+    public function testRenderTwig(): void
     {
         $twig = static::getContainer()->get('twig');
         $html = $twig->createTemplate('{{ chart_javascript() }}{{ chart_stylesheet() }}{{ render_chart({"div_attr": {"style": "height:300px"}}, ["test"]) }}')->render();
@@ -143,7 +144,7 @@ class BundleTest extends KernelTestCase
         $this->assertStringNotContainsString('%func%', $html);
     }
 
-    public function testRenderOnlyChart()
+    public function testRenderOnlyChart(): void
     {
         $html = static::getContainer()->get('twig')->createTemplate('{{ render_chart({"only_chart": true}, ["dummy"]) }}')->render();
 
@@ -157,12 +158,7 @@ class BundleTest extends KernelTestCase
  */
 class SingleRoleUser implements UserInterface
 {
-    private $role;
-
-    public function __construct(string $role)
-    {
-        $this->role = $role;
-    }
+    public function __construct(private readonly string $role) {}
 
     public function getSingleRole(): ?string
     {
@@ -174,9 +170,7 @@ class SingleRoleUser implements UserInterface
         return ['ROLE_USER', $this->role, 'ROLE_OTHER'];
     }
 
-    public function eraseCredentials(): void
-    {
-    }
+    public function eraseCredentials(): void {}
 
     public function getUserIdentifier(): string
     {

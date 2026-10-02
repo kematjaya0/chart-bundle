@@ -7,15 +7,14 @@
 
 namespace Kematjaya\ChartBundle\Builder;
 
+use Doctrine\Common\Collections\Collection;
 use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
-use Doctrine\Common\Collections\Collection;
 
 /**
- *
  * @author guest
  */
-interface ChartRendererBuilderInterface 
+interface ChartRendererBuilderInterface
 {
     public function addChartRenderer(ChartRendererInterface $element): self;
 

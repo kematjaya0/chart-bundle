@@ -7,10 +7,9 @@
 
 namespace Kematjaya\ChartBundle\Renderer;
 
-use Kematjaya\ChartBundle\Renderer\ChartRendererInterface;
-use Kematjaya\ChartBundle\Chart\ClickableChartInterface;
-use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Doctrine\ORM\QueryBuilder;
+use Kematjaya\ChartBundle\Chart\AbstractChart;
+use Kematjaya\ChartBundle\Chart\ClickableChartInterface;
 
 /**
  * Description of AbstractChartRenderer
@@ -19,34 +18,34 @@ use Doctrine\ORM\QueryBuilder;
  */
 abstract class AbstractChartRenderer implements ChartRendererInterface
 {
-    public function render(AbstractChart $chart, QueryBuilder $queryBuilder):array
+    public function render(AbstractChart $chart, QueryBuilder $queryBuilder): array
     {
         $series = $chart->getSeries($queryBuilder);
         if ($chart instanceof ClickableChartInterface) {
             foreach ($series as $k => $v) {
                 $series[$k]['point'] = [
                     "events" => [
-                        "click" => '%func%'
-                    ]
+                        "click" => '%func%',
+                    ],
                 ];
-            }   
+            }
         }
-        
+
         $chartArray = [
             "title" => [
-                "text" => $chart->getTitle()
+                "text" => $chart->getTitle(),
             ],
             "subtitle" => [
-                "text" => ''
+                "text" => '',
             ],
             "series" => $series,
             "credits" => [
-                "enabled" => false
-            ]
+                "enabled" => false,
+            ],
         ];
-        
+
         return array_merge($chartArray, $this->toArray($chart, $queryBuilder));
     }
-    
-    abstract protected function toArray(AbstractChart $chart, QueryBuilder $qb):array;
+
+    abstract protected function toArray(AbstractChart $chart, QueryBuilder $qb): array;
 }

@@ -6,8 +6,8 @@
 
 namespace Kematjaya\ChartBundle\CompilerPass;
 
-use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Kematjaya\ChartBundle\Builder\ChartBuilderInterface;
+use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Reference;
  * @license https://opensource.org/licenses/MIT MIT
  * @author  Nur Hidayatullah <kematjaya0@gmail.com>
  */
-class ChartCompilerPass implements CompilerPassInterface 
+class ChartCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {

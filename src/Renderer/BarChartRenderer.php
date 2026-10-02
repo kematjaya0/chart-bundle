@@ -7,33 +7,25 @@
 
 namespace Kematjaya\ChartBundle\Renderer;
 
-use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Doctrine\ORM\QueryBuilder;
+use Kematjaya\ChartBundle\Chart\AbstractChart;
 
 /**
  * Description of BarChartRenderer
  *
  * @author guest
  */
-class BarChartRenderer extends ColumnChartRenderer 
+class BarChartRenderer extends ColumnChartRenderer
 {
-    /**
-     * 
-     * @param AbstractChart $chart
-     * @return bool
-     */
-    public function isSupported(AbstractChart $chart): bool 
+    public function isSupported(AbstractChart $chart): bool
     {
         return AbstractChart::CHART_BAR === $chart->getChartType();
     }
-    
+
     /**
-     * 
-     * @param AbstractChart $chart
-     * @param QueryBuilder $qb
-     * @return array array of highchart json 
+     * @return array array of highchart json
      */
-    public function toArray(AbstractChart $chart, QueryBuilder $qb): array 
+    public function toArray(AbstractChart $chart, QueryBuilder $qb): array
     {
         $arr = parent::toArray($chart, $qb);
         $arr['legend'] = [
@@ -44,16 +36,16 @@ class BarChartRenderer extends ColumnChartRenderer
             "y" => 80,
             "floating" => true,
             "borderWidth" => 1,
-            "shadow" => true
+            "shadow" => true,
         ];
         $arr['plotOptions'] = [
             AbstractChart::CHART_BAR => [
                 'dataLabels' => [
-                    'enabled' => true
-                ]
-            ]
+                    'enabled' => true,
+                ],
+            ],
         ];
-        
+
         return $arr;
     }
 }

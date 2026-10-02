@@ -7,18 +7,17 @@
 
 namespace Kematjaya\ChartBundle\Renderer;
 
-use Kematjaya\ChartBundle\Chart\AbstractChart;
 use Doctrine\ORM\QueryBuilder;
+use Kematjaya\ChartBundle\Chart\AbstractChart;
 
 /**
- *
  * @author guest
  */
-interface ChartRendererInterface 
+interface ChartRendererInterface
 {
-    const TAG_NAME = 'kematjaya.chart_renderer';
-    
-    public function render(AbstractChart $chart, QueryBuilder $qb):array;
-    
-    public function isSupported(AbstractChart $chart):bool;
+    public const TAG_NAME = 'kematjaya.chart_renderer';
+
+    public function render(AbstractChart $chart, QueryBuilder $qb): array;
+
+    public function isSupported(AbstractChart $chart): bool;
 }
